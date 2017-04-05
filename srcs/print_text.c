@@ -20,3 +20,9 @@ void	print_text(t_environment *env)
 		x++;
 	}
 }
+
+void	refresh_screen(t_environment *env)
+{
+	clear_it(env);
+	print_text(env);
+}

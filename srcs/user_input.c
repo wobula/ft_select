@@ -32,8 +32,6 @@ void	highlight_text(t_environment *env)
 	env->current++;
 	if (env->current >= env->argc)
 		env->current = 0;
-	clear_it(env);
-	print_text(env);
 }
 
 void	move_up_down(t_environment *env, unsigned long keycode)
@@ -42,12 +40,10 @@ void	move_up_down(t_environment *env, unsigned long keycode)
 		env->current++;
 	else
 		env->current--;
-	if (env->current <= -1)
-		env->current = env->argc;
+	if (env->current < 0)
+		env->current = env->argc - 1;
 	else if (env->current > env->argc - 1)
 		env->current = 0;
-	clear_it(env);
-	print_text(env);
 }
 
 char	**recreate(char **old, int remove)
@@ -92,18 +88,20 @@ void	remove_element(t_environment *env)
 	ft_strdel2d(tmp2);
 	ft_strdel(&env->high);
 	env->high = ft_strxnew('0', env->argc);
-	clear_it(env);
-	print_text(env);
 }
 
-void	wait_for_input(t_environment *env)
+void	wait_for_input(void)
 {
 	unsigned long	keycode;
+	t_environment	*env;
+	int				refresh;
 
+	env = store_retrieve_env(NULL);
 	clear_it(env);
 	print_text(env);
 	while (keycode = 0, (read(0, &keycode, 6)) != 0)
 	{
+		refresh = 1;
 		if (keycode == KEY_ESCAPE || ((keycode == KEY_DELETE || keycode == KEY_BACKSPACE) && env->argc == 1))
 			exit(0);
 		else if (keycode == KEY_UP || keycode == KEY_DOWN)
@@ -114,5 +112,9 @@ void	wait_for_input(t_environment *env)
 			highlight_return(env);
 		else if (keycode == KEY_DELETE || keycode == KEY_BACKSPACE)
 			remove_element(env);
+		else
+			refresh = 0;
+		if (refresh)
+			refresh_screen(env);
 	}
 }
