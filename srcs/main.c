@@ -1,50 +1,23 @@
 #include "../includes/ft_select.h"
-/*
-static void	initiate_signals(void (*restart_function)(int))
-{
-	signal(SIGWINCH, refresh_screen);
-	signal(SIGCONT, restart_function);
-	signal(SIGTSTP, abort_no_exit);
-	signal(SIGINT, shutdown);
-	signal(SIGHUP, shutdown);
-	signal(SIGTERM, shutdown);
-	signal(SIGSEGV, shutdown);
-	signal(SIGQUIT, shutdown);
-	signal(SIGFPE, shutdown);
-	signal(SIGALRM, shutdown);
-	signal(SIGKILL, shutdown);
-	signal(SIGABRT, shutdown);
-	signal(SIGUSR1, shutdown);
-	signal(SIGUSR2, shutdown);
-}
-*/
 
-int			get_row_size(char **str)
+void		shutdown(t_environment *env)
 {
-	size_t	largest;
-	int		x;
-
-	largest = 0;
-	x = 0;
-	while (str[x] != 0)
-	{
-		if (ft_strlen(str[x]) > largest)
-			largest = ft_strlen(str[x]);
-		x++;
-	}
-	return (largest);
-}
-void		clear_it(t_environment *env)
-{
-	int	x;
+	int x;
 
 	x = 0;
-	while (x < env->height)
+	while (env->argv[x] != 0)
 	{
-		ft_putstrfd(tgoto(tgetstr("cl", NULL), 0, x), 2);
-		ft_putstrfd(tgetstr("ce", NULL), 2);
+		ft_strdel(&env->argv[x]);
 		x++;
 	}
+	ft_strdel(&env->high);
+	env->term.c_lflag |= ICANON;
+	env->term.c_lflag |= ECHO;
+	ft_putstrfd(tgetstr("me", NULL), 2);
+	ft_putstrfd(tgetstr("ve", NULL), 2);
+	tcsetattr(0, 0, &env->term);
+	ft_memdel((void*)&env);
+	exit(1);
 }
 
 void		suspend_terminal(int signum)
@@ -68,24 +41,33 @@ void		suspend_terminal(int signum)
 	}
 }
 
-void		shutdown(t_environment *env)
+int			get_row_size(char **str)
 {
-	int x;
+	size_t	largest;
+	int		x;
 
+	largest = 0;
 	x = 0;
-	while (env->argv[x] != 0)
+	while (str[x] != 0)
 	{
-		ft_strdel(&env->argv[x]);
+		if (ft_strlen(str[x]) > largest)
+			largest = ft_strlen(str[x]);
 		x++;
 	}
-	ft_strdel(&env->high);
-	env->term.c_lflag |= ICANON;
-	env->term.c_lflag |= ECHO;
-	ft_putstrfd(tgetstr("me", NULL), 2);
-	ft_putstrfd(tgetstr("ve", NULL), 2);
-	tcsetattr(0, 0, &env->term);
-	ft_memdel((void*)&env);
-	exit(1);
+	return (largest);
+}
+
+void		clear_it(t_environment *env)
+{
+	int	x;
+
+	x = 0;
+	while (x < env->height)
+	{
+		ft_putstrfd(tgoto(tgetstr("cl", NULL), 0, x), 2);
+		ft_putstrfd(tgetstr("ce", NULL), 2);
+		x++;
+	}
 }
 
 void	instantiate_terminal(t_environment *env)
@@ -109,18 +91,7 @@ void	instantiate_terminal(t_environment *env)
 	ft_putstr_fd(tgetstr("vi", NULL), 2);
 	ft_putstr_fd(tgetstr("bw", NULL), 2);
 }
-/*
-static void	restart(int signum)
-{
-	t_environment *env;
 
-	(void)signum;
-	env = store_retrieve_env(NULL);
-	instantiate_terminal(env);
-	initiate_signals(&restart);
-	print_screen(env);
-}
-*/
 t_environment	*setup_env(int argc, char **argv)
 {
 	t_environment	*env;
@@ -155,7 +126,7 @@ int		main(int argc, char **argv)
 	{
 		env = setup_env(argc, argv);
 		store_retrieve_env(env);
-		//initiate_signals(&restart);
+		ft_signals(env);
 		refresh_screen(0);
 		wait_for_input();
 	}

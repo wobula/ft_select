@@ -28,6 +28,7 @@ COMPILED =			main.o \
 					ft_putcharnfd.o \
 					user_input.o \
 					print_text.o \
+					signals.o \
 
 all: $(NAME)
 

@@ -6,6 +6,7 @@
 # include <termios.h>
 # include <term.h>
 # include <sys/ioctl.h>
+# include <signal.h>
 
 # define KEY_ESCAPE 0x1B
 # define KEY_SPACE 0x20
@@ -37,7 +38,10 @@ void				clear_it(t_environment *env);
 void				print_text(t_environment *env);
 void				wait_for_input(void);
 t_environment		*store_retrieve_env(t_environment *new);
-void				shutdown(t_environment *env);
 void				refresh_screen(int signum);
+void				shutdown(t_environment *env);
+void				ft_signals(t_environment *env);
+void				instantiate_terminal(t_environment *env);
+void				suspend_terminal(int signum);
 
 #endif
