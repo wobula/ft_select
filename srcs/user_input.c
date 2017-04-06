@@ -103,7 +103,11 @@ void	wait_for_input(void)
 	{
 		refresh = 1;
 		if (keycode == KEY_ESCAPE || ((keycode == KEY_DELETE || keycode == KEY_BACKSPACE) && env->argc == 1))
+		{
+			clear_it(env);
+			shutdown(env);
 			exit(0);
+		}
 		else if (keycode == KEY_UP || keycode == KEY_DOWN)
 			move_up_down(env, keycode);
 		else if (keycode == KEY_SPACE)
@@ -115,6 +119,6 @@ void	wait_for_input(void)
 		else
 			refresh = 0;
 		if (refresh)
-			refresh_screen(env);
+			refresh_screen(0);
 	}
 }
