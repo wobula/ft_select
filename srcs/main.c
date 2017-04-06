@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rschramm <rschramm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/04/06 11:22:03 by rschramm          #+#    #+#             */
+/*   Updated: 2017/04/06 23:46:35 by rschramm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/ft_select.h"
 
-void		shutdown(t_environment *env)
+void			shutdown(t_environment *env)
 {
 	int x;
 
@@ -10,6 +22,9 @@ void		shutdown(t_environment *env)
 		ft_strdel(&env->argv[x]);
 		x++;
 	}
+	ft_strdel(&env->argv[x]);
+	free(env->argv);
+	env->argv = NULL;
 	ft_strdel(&env->high);
 	env->term.c_lflag |= ICANON;
 	env->term.c_lflag |= ECHO;
@@ -20,7 +35,7 @@ void		shutdown(t_environment *env)
 	exit(1);
 }
 
-void		suspend_terminal(int signum)
+void			suspend_terminal(int signum)
 {
 	t_environment	*env;
 	char			copy[2];
@@ -41,36 +56,7 @@ void		suspend_terminal(int signum)
 	}
 }
 
-int			get_row_size(char **str)
-{
-	size_t	largest;
-	int		x;
-
-	largest = 0;
-	x = 0;
-	while (str[x] != 0)
-	{
-		if (ft_strlen(str[x]) > largest)
-			largest = ft_strlen(str[x]);
-		x++;
-	}
-	return (largest);
-}
-
-void		clear_it(t_environment *env)
-{
-	int	x;
-
-	x = 0;
-	while (x < env->height)
-	{
-		ft_putstrfd(tgoto(tgetstr("cl", NULL), 0, x), 2);
-		ft_putstrfd(tgetstr("ce", NULL), 2);
-		x++;
-	}
-}
-
-void	instantiate_terminal(t_environment *env)
+void			instantiate_terminal(t_environment *env)
 {
 	if (tgetent(NULL, env->terminal_name) <= 0)
 	{
@@ -83,7 +69,7 @@ void	instantiate_terminal(t_environment *env)
 	env->term.c_cc[VMIN] = 1;
 	env->term.c_cc[VTIME] = 0;
 	if (tcsetattr(0, TCSADRAIN, &env->term) == -1)
-		exit (1);
+		exit(1);
 	ioctl(0, TIOCGWINSZ, &env->sz);
 	env->width = env->sz.ws_col;
 	env->height = env->sz.ws_row;
@@ -106,18 +92,9 @@ t_environment	*setup_env(int argc, char **argv)
 	return (env);
 }
 
-t_environment	*store_retrieve_env(t_environment *new)
+int				main(int argc, char **argv)
 {
-	static t_environment	*storage = NULL;
-
-	if (new)
-		storage = new;
-	return (storage);
-}
-
-int		main(int argc, char **argv)
-{
-	t_environment 	*env;
+	t_environment	*env;
 	int				x;
 
 	x = 0;

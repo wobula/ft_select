@@ -26,9 +26,11 @@ LIB_FLAGS =         -L $(LIBFT) -lftprintf -ltermcap\
 COMPILED =			main.o \
 					ft_putstrfd.o \
 					ft_putcharnfd.o \
-					user_input.o \
+					wait_for_input.o \
+					manipulate_input.o \
 					print_text.o \
 					signals.o \
+					helper.o \
 
 all: $(NAME)
 

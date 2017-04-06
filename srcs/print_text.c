@@ -1,4 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_text.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rschramm <rschramm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/04/06 11:22:03 by rschramm          #+#    #+#             */
+/*   Updated: 2017/04/06 23:46:35 by rschramm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/ft_select.h"
+
+void	modify_text(t_environment *env, int current)
+{
+	if (env->high[current] == 'h')
+		ft_putstrfd(tgetstr("so", NULL), 2);
+	if (current == env->current)
+		ft_putstrfd(tgetstr("us", NULL), 2);
+	ft_putstrfd(env->argv[current], 2);
+	if (current == env->current)
+		ft_putstrfd(tgetstr("ue", NULL), 2);
+	if (env->high[current] == 'h')
+		ft_putstrfd(tgetstr("se", NULL), 2);
+	ft_putcharnfd(' ', env->row_size - ft_strlen(env->argv[current]), 2);
+}
 
 void	print_text(t_environment *env)
 {
@@ -15,16 +41,7 @@ void	print_text(t_environment *env)
 		column = 0;
 		while (((current = (env->height * column) + row)) < env->argc)
 		{
-			if (env->high[current] == 'h')
-				ft_putstrfd(tgetstr("so", NULL), 2);
-			if (current == env->current)
-				ft_putstrfd(tgetstr("us", NULL), 2);
-			ft_putstrfd(env->argv[current], 2);
-			if (current == env->current)
-				ft_putstrfd(tgetstr("ue", NULL), 2);
-			if (env->high[current] == 'h')
-				ft_putstrfd(tgetstr("se", NULL), 2);
-			ft_putcharnfd(' ', env->row_size - ft_strlen(env->argv[current]), 2);
+			modify_text(env, current);
 			column++;
 		}
 		row++;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_select.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rschramm <rschramm@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/04/06 11:22:03 by rschramm          #+#    #+#             */
+/*   Updated: 2017/04/06 23:46:35 by rschramm         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_SELECT_H
 # define FT_SELECT_H
 
@@ -43,5 +55,11 @@ void				shutdown(t_environment *env);
 void				ft_signals(t_environment *env);
 void				instantiate_terminal(t_environment *env);
 void				suspend_terminal(int signum);
+void				highlight_return(t_environment *env);
+void				highlight_text(t_environment *env);
+void				move_up_down(t_environment *env, unsigned long keycode);
+char				**recreate(char **old, int remove);
+void				remove_element(t_environment *env);
+int					get_row_size(char **str);
 
 #endif

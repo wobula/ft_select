@@ -10,5 +10,5 @@ void	ft_strdel2d(char **str)
 		ft_strdel(&str[x]);
 		x++;
 	}
-	ft_memdel((void*)str);
+	ft_strdel(&str[x]);
 }
