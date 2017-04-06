@@ -19,6 +19,8 @@ static void		sig_tstp(int sig)
 		ft_signals(env);
 		refresh_screen(0);
 	}
+	else if (sig == SIGWINCH)
+		refresh_screen(0);
 }
 
 static void		sig_handler(int sig)

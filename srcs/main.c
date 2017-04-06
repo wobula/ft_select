@@ -89,7 +89,6 @@ void	instantiate_terminal(t_environment *env)
 	env->height = env->sz.ws_row;
 	ft_putstr_fd(tgetstr("ti", NULL), 2);
 	ft_putstr_fd(tgetstr("vi", NULL), 2);
-	ft_putstr_fd(tgetstr("bw", NULL), 2);
 }
 
 t_environment	*setup_env(int argc, char **argv)
@@ -101,7 +100,7 @@ t_environment	*setup_env(int argc, char **argv)
 	env->argv = ft_strdup2d(argv, 1);
 	env->terminal_name = getenv("TERM");
 	env->current = 0;
-	env->row_size = get_row_size(env->argv);
+	env->row_size = get_row_size(env->argv) + 1;
 	env->high = ft_strxnew('0', env->argc);
 	instantiate_terminal(env);
 	return (env);

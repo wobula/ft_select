@@ -7,6 +7,7 @@ void	print_text(t_environment *env)
 	int current;
 
 	row = 0;
+	current = 0;
 	while (row < env->height && row < env->argc)
 	{
 		ft_putstrfd(tgoto(tgetstr("cm", NULL), 0, row), 2);
@@ -14,16 +15,16 @@ void	print_text(t_environment *env)
 		column = 0;
 		while (((current = (env->height * column) + row)) < env->argc)
 		{
-			if (env->high[row] == 'h')
+			if (env->high[current] == 'h')
 				ft_putstrfd(tgetstr("so", NULL), 2);
-			if (row == env->current)
+			if (current == env->current)
 				ft_putstrfd(tgetstr("us", NULL), 2);
-			ft_putstrfd(env->argv[row], 2);
-			ft_putstrfd("\n", 2);
-			if (row == env->current)
+			ft_putstrfd(env->argv[current], 2);
+			if (current == env->current)
 				ft_putstrfd(tgetstr("ue", NULL), 2);
-			if (env->high[row] == 'h')
+			if (env->high[current] == 'h')
 				ft_putstrfd(tgetstr("se", NULL), 2);
+			ft_putcharnfd(' ', env->row_size - ft_strlen(env->argv[current]), 2);
 			column++;
 		}
 		row++;
@@ -32,9 +33,11 @@ void	print_text(t_environment *env)
 
 void	set_window_size(t_environment *env)
 {
-	ioctl(0, TIOCGWINSZ, &env->sz);
-	env->width = env->sz.ws_col;
-	env->height = env->sz.ws_row;
+	struct winsize window;
+
+	ioctl(0, TIOCGWINSZ, &window);
+	env->width = window.ws_col;
+	env->height = window.ws_row;
 }
 
 int		size_check(t_environment *env)
