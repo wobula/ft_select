@@ -31,6 +31,7 @@ COMPILED =			main.o \
 					print_text.o \
 					signals.o \
 					helper.o \
+					remove_input.o \
 
 all: $(NAME)
 

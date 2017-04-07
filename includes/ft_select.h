@@ -58,7 +58,7 @@ void				suspend_terminal(int signum);
 void				highlight_return(t_environment *env);
 void				highlight_text(t_environment *env);
 void				move_up_down(t_environment *env, unsigned long keycode);
-char				**recreate(char **old, int remove);
+char				**recreate2d(char **old, int remove);
 void				remove_element(t_environment *env);
 int					get_row_size(char **str);
 

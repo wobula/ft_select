@@ -46,7 +46,7 @@ static void		sig_handler(int sig)
 	}
 	else
 	{
-		ft_putstr("weirdness");
+		ft_putstr("Opps");
 		exit(1);
 	}
 }
