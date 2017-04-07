@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_input.c                                 :+:      :+:    :+:   */
+/*   remove_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rschramm <rschramm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -39,13 +39,33 @@ char	**recreate(char **old, int remove)
 	return (new);
 }
 
+char	*refresh_high(t_environment *env)
+{
+	char	*new;
+	int		x;
+	int		y;
+
+	new = ft_strnew(env->argc);
+	x = 0;
+	y = 0;
+	while (env->high[x] != '\0')
+	{
+		if (x != env->current)
+		{
+			new[y] = env->high[x];
+			y++;
+		}
+		x++;
+	}
+	ft_strdel(&env->high);
+	return (new);
+}
+
 void	remove_element(t_environment *env)
 {
 	char	**tmp2;
 
 	env->argc--;
-	if (env->argc < 0)
-		env->argc = 0;
 	tmp2 = ft_strdup2d(env->argv, 0);
 	ft_strdel2d(env->argv);
 	free(env->argv);
@@ -56,6 +76,5 @@ void	remove_element(t_environment *env)
 	ft_strdel2d(tmp2);
 	free(tmp2);
 	tmp2 = NULL;
-	ft_strdel(&env->high);
-	env->high = ft_strxnew('0', env->argc);
+	env->high = refresh_high(env);
 }
