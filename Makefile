@@ -32,6 +32,7 @@ COMPILED =			main.o \
 					signals.o \
 					helper.o \
 					remove_input.o \
+					colors.o \
 
 all: $(NAME)
 

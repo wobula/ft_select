@@ -18,7 +18,9 @@ void	modify_text(t_environment *env, int current)
 		ft_putstrfd(tgetstr("so", NULL), 2);
 	if (current == env->current)
 		ft_putstrfd(tgetstr("us", NULL), 2);
+	color_check(env, current);
 	ft_putstrfd(env->argv[current], 2);
+	ft_colorsfd("normal", 2);
 	if (current == env->current)
 		ft_putstrfd(tgetstr("ue", NULL), 2);
 	if (env->high[current] == 'h')

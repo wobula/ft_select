@@ -19,6 +19,8 @@
 # include <term.h>
 # include <sys/ioctl.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 
 # define KEY_ESCAPE 0x1B
 # define KEY_SPACE 0x20
@@ -61,5 +63,7 @@ void				move_up_down(t_environment *env, unsigned long keycode);
 char				**recreate2d(char **old, int remove);
 void				remove_element(t_environment *env);
 int					get_row_size(char **str);
+void				ft_colorsfd(char *color, int fd);
+void				color_check(t_environment *env, int current);
 
 #endif
